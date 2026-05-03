@@ -1,0 +1,180 @@
+{
+  "name": "murdermystery",
+  "tree": {
+    "$className": "DataModel",
+    "Workspace": {
+      "Ignore": {
+        "$className": "Folder"
+      },
+      "Lobby": {
+        "$className": "Folder"
+      },
+      "Map": {
+        "$className": "Folder"
+      },
+      "Spawns": {
+        "$className": "Folder"
+      }
+    },
+    "ReplicatedStorage": {
+      "Shared": {
+        "$className": "Folder",
+        "Classes": {
+          "$className": "Folder"
+        },
+        "Components": {
+          "$className": "Folder"
+        },
+        "Config": {
+          "$className": "Folder"
+        },
+        "Constants": {
+          "$className": "Folder"
+        },
+        "Libraries": {
+          "$className": "Folder"
+        },
+        "Modules": {
+          "$className": "Folder"
+        },
+        "Network": {
+          "$className": "Folder"
+        },
+        "Services": {
+          "$className": "Folder",
+          "ExampleService": {
+            "$className": "Folder",
+            "ExampleServiceClient": {
+              "$path": "src/shared/services/ExampleService/Client.luau"
+            },
+            "ExampleServiceUtils": {
+              "$path": "src/shared/services/ExampleService/Utils.luau"
+            }
+          }
+        },
+        "Types": {
+          "$className": "Folder"
+        },
+        "Utils": {
+          "$className": "Folder"
+        }
+      },
+      "Assets": {
+        "$className": "Folder",
+        "Animations": {
+          "$className": "Folder"
+        },
+        "Audio": {
+          "$className": "Folder"
+        },
+        "Effects": {
+          "$className": "Folder"
+        },
+        "Images": {
+          "$className": "Folder"
+        },
+        "Maps": {
+          "$className": "Folder"
+        },
+        "Models": {
+          "$className": "Folder"
+        },
+        "Tools": {
+          "$className": "Folder"
+        },
+        "Weapons": {
+          "$className": "Folder"
+        }
+      },
+      "Packages": {
+        "$path": "Packages"
+      }
+    },
+    "ServerScriptService": {
+      "Classes": {
+        "$className": "Folder"
+      },
+      "Commands": {
+        "$className": "Folder"
+      },
+      "Config": {
+        "$className": "Folder"
+      },
+      "Data": {
+        "$className": "Folder"
+      },
+      "Modules": {
+        "$className": "Folder"
+      },
+      "Services": {
+        "$className": "Folder",
+        "ExampleService": {
+          "$className": "Folder",
+          "ExampleServiceServer": {
+            "$path": "src/shared/services/ExampleService/Server.luau"
+          }
+        }
+      },
+      "Systems": {
+        "$className": "Folder"
+      },
+      "Utils": {
+        "$className": "Folder"
+      },
+      "Server": {
+        "$path": "src/startup/Server.server.luau"
+      }
+    },
+    "ServerStorage": {
+      "Maps": {
+        "$className": "Folder"
+      },
+      "NPCs": {
+        "$className": "Folder"
+      },
+      "Templates": {
+        "$className": "Folder"
+      }
+    },
+    "StarterPlayer": {
+      "StarterPlayerScripts": {
+        "Components": {
+          "$className": "Folder"
+        },
+        "Controllers": {
+          "$className": "Folder"
+        },
+        "Effects": {
+          "$className": "Folder"
+        },
+        "UI": {
+          "$className": "Folder",
+          "Components": {
+            "$className": "Folder"
+          },
+          "Huds": {
+            "$className": "Folder"
+          },
+          "Menus": {
+            "$className": "Folder"
+          },
+          "Screens": {
+            "$className": "Folder"
+          },
+          "Theme": {
+            "$className": "Folder"
+          },
+          "Widgets": {
+            "$className": "Folder"
+          }
+        },
+        "Utils": {
+          "$className": "Folder"
+        },
+        "Client": {
+          "$path": "src/startup/Client.client.luau"
+        }
+      }
+    }
+  }
+}
