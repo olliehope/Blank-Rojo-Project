@@ -100,9 +100,6 @@ function updateReadme(displayName) {
 	});
 }
 
-function toLuauString(value) {
-	return JSON.stringify(value);
-}
 
 function main() {
 	const displayName = process.argv.slice(2).join(" ").trim();
