@@ -1,6 +1,16 @@
-# Roblox Project Template
+# Blank-Rojo-Project
 
-A small Rojo/Rokit/Wally starter for Roblox projects.
+A simple Rojo/Rokit/Wally setup for Blank-Rojo-Project.
+
+## New Project
+
+After cloning this template, rename the starter files with:
+
+```bash
+npm run init -- My Project Name
+```
+
+This updates the npm package name, Wally package name, README title, example UI title, and generated Rojo project name.
 
 ## Setup
 
@@ -17,12 +27,13 @@ If PowerShell blocks `npm`, use `npm.cmd` with the same script name.
 ## Commands
 
 ```bash
-npm run build:rojo   # regenerate default.project.json
-npm run sourcemap    # regenerate sourcemap.json
-npm run serve        # generate + start rojo serve
-npm run build        # build place.rbxlx
-npm run check        # regenerate, format-check, and sourcemap-check
-npm run format       # format Luau files
+npm run init -- My Project Name # rename this clone for a new project
+npm run build:rojo             # regenerate default.project.json
+npm run sourcemap              # regenerate sourcemap.json
+npm run serve                  # generate + start rojo serve
+npm run build                  # build place.rbxlx
+npm run check                  # regenerate, format-check, and sourcemap-check
+npm run format                 # format Luau files
 ```
 
 ## Source Layout
@@ -70,13 +81,11 @@ src/services/ExampleService/
   Utils/init.luau   # ReplicatedStorage.Services.ExampleService.ExampleServiceUtils
 ```
 
-`Server` stays private in `ServerScriptService`. `Client` and `Utils` are replicated so both sides
-can require them.
+`Server` stays private in `ServerScriptService`. `Client` and `Utils` are replicated so both sides can require them.
 
 ## Packages
 
-Wally installs generated packages into the root `Packages` folder. The folder is tracked with a
-`.gitkeep`, but generated package contents are ignored.
+Wally installs generated packages into the root `Packages` folder. The folder is tracked with a `.gitkeep`, but generated package contents are ignored.
 
 Custom packages live in `src/packages` and are merged into the same Roblox folder:
 
@@ -90,8 +99,7 @@ Package names must be unique across Wally and custom packages.
 
 ## UI
 
-UI uses Vide through Wally. Run `wally install` before serving so `ReplicatedStorage.Packages.vide`
-exists in Studio.
+UI uses Vide through Wally. Run `wally install` before serving so `ReplicatedStorage.Packages.vide` exists in Studio.
 
 ```text
 src/ui/

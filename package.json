@@ -1,9 +1,11 @@
 {
-  "name": "roblox-template",
+  "name": "blank-rojo-project",
+  "projectName": "Blank-Rojo-Project",
   "version": "0.1.0",
-  "description": "A small Rojo starter template for Roblox projects.",
+  "description": "Blank-Rojo-Project Roblox project setup.",
   "main": "index.js",
   "scripts": {
+    "init": "node tools/initProject.js",
     "build:rojo": "node tools/genRojoTree.js",
     "watch:rojo": "chokidar \"src/**/*\" -c \"node tools/genRojoTree.js\" --initial",
     "sourcemap": "node tools/genRojoTree.js && rojo sourcemap default.project.json --output sourcemap.json",

@@ -19,7 +19,7 @@ local function MainScreen(vide)
 			Font = Theme.Fonts.Bold,
 			Position = UDim2.fromOffset(0, 0),
 			Size = UDim2.new(1, 0, 0, 48),
-			Text = "Roblox Template",
+			Text = "testttttttttttt",
 			TextColor3 = Theme.Colors.Text,
 			TextSize = 28,
 		}),

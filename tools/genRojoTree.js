@@ -38,10 +38,12 @@ function readProjectName() {
 	const packageJsonPath = path.join(ROOT_PATH, "package.json");
 
 	if (!exists(packageJsonPath)) {
-		return "roblox-template";
+		return "Weapon-RNG";
 	}
 
-	return readJson(packageJsonPath).name || "roblox-template";
+	const packageJson = readJson(packageJsonPath);
+
+	return packageJson.projectName || packageJson.name || "Weapon-RNG";
 }
 
 function pathMapping(filePath) {
