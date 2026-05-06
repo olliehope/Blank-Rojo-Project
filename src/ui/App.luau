@@ -1,4 +1,4 @@
-local MainScreen = require(script.Screens.MainScreen)
+local MainScreen = require(script.Parent.Screens.MainScreen)
 
 local function App(vide)
 	local create = vide.create
