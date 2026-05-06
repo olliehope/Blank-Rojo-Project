@@ -1,13 +1,17 @@
 {
-  "name": "murdermystery",
-  "version": "1.0.0",
-  "description": "Rojo project for murdermystery.",
+  "name": "roblox-template",
+  "version": "0.1.0",
+  "description": "A small Rojo starter template for Roblox projects.",
   "main": "index.js",
   "scripts": {
     "build:rojo": "node tools/genRojoTree.js",
     "watch:rojo": "chokidar \"src/**/*\" -c \"node tools/genRojoTree.js\" --initial",
     "sourcemap": "node tools/genRojoTree.js && rojo sourcemap default.project.json --output sourcemap.json",
-    "build": "node tools/genRojoTree.js && rojo build default.project.json -o murdermystery.rbxlx"
+    "format": "stylua src",
+    "lint:style": "stylua --check src",
+    "check": "node tools/genRojoTree.js && stylua --check src && rojo sourcemap default.project.json --output sourcemap.json",
+    "serve": "node tools/genRojoTree.js && rojo serve default.project.json",
+    "build": "node tools/genRojoTree.js && rojo build default.project.json -o place.rbxlx"
   },
   "keywords": [],
   "author": "",

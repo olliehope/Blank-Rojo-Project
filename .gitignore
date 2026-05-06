@@ -1,5 +1,6 @@
-# Project place file
-/murdermystery.rbxlx
+# Built place files
+/*.rbxlx
+/*.rbxl
 
 # Roblox Studio lock files
 /*.rbxlx.lock
@@ -7,5 +8,6 @@
 
 # Generated tooling output
 /node_modules/
-/Packages/
+/Packages/*
+!/Packages/.gitkeep
 /sourcemap.json

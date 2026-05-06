@@ -3,82 +3,24 @@ const path = require("path");
 
 const ROOT_PATH = path.resolve(__dirname, "..");
 const SRC_PATH = path.join(ROOT_PATH, "src");
-const CLIENT_PATH = path.join(SRC_PATH, "client");
-const SHARED_PATH = path.join(SRC_PATH, "shared");
-const SERVER_PATH = path.join(SRC_PATH, "server");
-const STARTUP_PATH = path.join(SRC_PATH, "startup");
 const OUTPUT_PATH = path.join(ROOT_PATH, "default.project.json");
-
-const STARTUP_SERVER_PATH = path.join(STARTUP_PATH, "Server.server.luau");
-const STARTUP_CLIENT_PATH = path.join(STARTUP_PATH, "Client.client.luau");
 const PACKAGES_PATH = path.join(ROOT_PATH, "Packages");
+const STARTUP_PATH = path.join(SRC_PATH, "startup");
+const STARTUP_CLIENT_PATH = path.join(STARTUP_PATH, "Client.client.luau");
+const STARTUP_SERVER_PATH = path.join(STARTUP_PATH, "Server.server.luau");
 
-const initClaimedFolders = new Set();
+const SOURCE_ROOTS = {
+	client: path.join(SRC_PATH, "client"),
+	packages: path.join(SRC_PATH, "packages"),
+	server: path.join(SRC_PATH, "server"),
+	services: path.join(SRC_PATH, "services"),
+	shared: path.join(SRC_PATH, "shared"),
+	ui: path.join(SRC_PATH, "ui"),
+};
 
-const CLIENT_FOLDERS = [
-	"Components",
-	"Controllers",
-	"Effects",
-	"UI",
-	"Utils",
-];
-
-const SHARED_FOLDERS = [
-	"Classes",
-	"Components",
-	"Config",
-	"Constants",
-	"Libraries",
-	"Modules",
-	"Network",
-	"Services",
-	"Types",
-	"Utils",
-];
-
-const SERVER_FOLDERS = [
-	"Classes",
-	"Commands",
-	"Config",
-	"Data",
-	"Modules",
-	"Services",
-	"Systems",
-	"Utils",
-];
-
-const ASSET_FOLDERS = [
-	"Animations",
-	"Audio",
-	"Effects",
-	"Images",
-	"Maps",
-	"Models",
-	"Tools",
-	"Weapons",
-];
-
-const UI_FOLDERS = [
-	"Components",
-	"Huds",
-	"Menus",
-	"Screens",
-	"Theme",
-	"Widgets",
-];
-
-const SERVER_STORAGE_FOLDERS = [
-	"Maps",
-	"NPCs",
-	"Templates",
-];
-
-const WORKSPACE_FOLDERS = [
-	"Ignore",
-	"Lobby",
-	"Map",
-	"Spawns",
-];
+function exists(filePath) {
+	return fs.existsSync(filePath);
+}
 
 function toPosix(filePath) {
 	return filePath.split(path.sep).join("/");
@@ -88,8 +30,26 @@ function relativeToRoot(filePath) {
 	return toPosix(path.relative(ROOT_PATH, filePath));
 }
 
-function exists(filePath) {
-	return fs.existsSync(filePath);
+function readJson(filePath) {
+	return JSON.parse(fs.readFileSync(filePath, "utf8"));
+}
+
+function readProjectName() {
+	const packageJsonPath = path.join(ROOT_PATH, "package.json");
+
+	if (!exists(packageJsonPath)) {
+		return "roblox-template";
+	}
+
+	return readJson(packageJsonPath).name || "roblox-template";
+}
+
+function pathMapping(filePath) {
+	return { $path: relativeToRoot(filePath) };
+}
+
+function stripScriptSuffix(name) {
+	return name.replace(/\.(server|client)$/i, "");
 }
 
 function toPascalCase(value) {
@@ -100,113 +60,79 @@ function toPascalCase(value) {
 		.join("");
 }
 
-function readProjectName() {
-	const packageJsonPath = path.join(ROOT_PATH, "package.json");
-
-	if (!exists(packageJsonPath)) {
-		return "murdermystery";
+function toInstanceName(value) {
+	if (value.toLowerCase() === "ui") {
+		return "UI";
 	}
 
-	const packageJson = JSON.parse(fs.readFileSync(packageJsonPath, "utf8"));
-	return packageJson.name || "murdermystery";
+	return toPascalCase(value);
 }
 
-function createFolders(names) {
-	return Object.fromEntries(names.map((name) => [name, { $className: "Folder" }]));
+function isScriptFile(filePath) {
+	return [".lua", ".luau"].includes(path.extname(filePath).toLowerCase());
 }
 
-function stripScriptSuffix(filename) {
-	return filename.replace(/\.(server|client)$/i, "");
-}
-
-function isServerScriptName(filename) {
-	const normalized = stripScriptSuffix(filename).toLowerCase();
-
-	return (
-		filename.toLowerCase().endsWith(".server") ||
-		normalized === "server" ||
-		normalized.endsWith("server")
-	);
-}
-
-function getVirtualPath(sourceRoot, filepath) {
-	const relativePath = path.relative(sourceRoot, filepath);
-	const parts = relativePath.split(path.sep);
-	const rawFilename = path.basename(filepath, path.extname(filepath));
-	const filename = stripScriptSuffix(rawFilename);
-	const lowerFilename = filename.toLowerCase();
-	const folderParts = parts.slice(0, -1).map(toPascalCase);
-	const folderName = folderParts.length > 0 ? folderParts[folderParts.length - 1] : "";
-
-	let name;
-	if (lowerFilename === "init") {
-		name = folderName;
-	} else if (["server", "client", "utils", "types"].includes(lowerFilename)) {
-		name = folderName + toPascalCase(filename);
-	} else {
-		name = toPascalCase(filename);
-	}
-
-	return {
-		isInit: lowerFilename === "init",
-		isServer: isServerScriptName(rawFilename),
-		folder: folderParts,
-		name,
-		file: lowerFilename === "init"
-			? relativeToRoot(path.join(sourceRoot, ...parts.slice(0, -1)))
-			: relativeToRoot(filepath),
-	};
-}
-
-function folderKey(rootName, folder) {
-	return `${rootName}/${folder.join("/")}`.toLowerCase();
-}
-
-function isClaimedByInit(rootName, folder) {
-	for (let index = 1; index <= folder.length; index += 1) {
-		if (initClaimedFolders.has(folderKey(rootName, folder.slice(0, index)))) {
-			return true;
-		}
-	}
-
-	return false;
-}
-
-function collectScriptFiles(dir, files = []) {
+function buildScriptTree(dir) {
 	if (!exists(dir)) {
-		return files;
+		return undefined;
 	}
 
-	for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+	const entries = fs
+		.readdirSync(dir, { withFileTypes: true })
+		.sort((left, right) => left.name.localeCompare(right.name));
+	const initFile = entries.find((entry) => {
+		if (!entry.isFile()) {
+			return false;
+		}
+
+		const baseName = stripScriptSuffix(path.basename(entry.name, path.extname(entry.name))).toLowerCase();
+		return baseName === "init" && isScriptFile(entry.name);
+	});
+
+	if (initFile) {
+		return pathMapping(dir);
+	}
+
+	const node = { $className: "Folder" };
+
+	for (const entry of entries) {
 		const fullPath = path.join(dir, entry.name);
 
 		if (entry.isDirectory()) {
-			collectScriptFiles(fullPath, files);
-		} else if (entry.isFile() && [".lua", ".luau"].includes(path.extname(entry.name))) {
-			files.push(fullPath);
+			const childNode = buildScriptTree(fullPath);
+
+			if (childNode) {
+				node[toInstanceName(entry.name)] = childNode;
+			}
+		} else if (entry.isFile() && isScriptFile(entry.name)) {
+			const name = stripScriptSuffix(path.basename(entry.name, path.extname(entry.name)));
+			node[toInstanceName(name)] = pathMapping(fullPath);
 		}
 	}
 
-	return files;
+	return Object.keys(node).length > 1 ? node : undefined;
 }
 
-function sortFilesForInitClaims(files) {
-	return files.sort((left, right) => {
-		const leftIsInit = stripScriptSuffix(path.basename(left, path.extname(left))).toLowerCase() === "init";
-		const rightIsInit = stripScriptSuffix(path.basename(right, path.extname(right))).toLowerCase() === "init";
-
-		if (leftIsInit !== rightIsInit) {
-			return leftIsInit ? -1 : 1;
-		}
-
-		return relativeToRoot(left).localeCompare(relativeToRoot(right));
-	});
+function scriptTreeOrFolder(dir) {
+	return buildScriptTree(dir) || { $className: "Folder" };
 }
 
-function getOrCreateFolder(root, folder) {
+function serviceChildrenFromDir(dir) {
+	const scriptTree = buildScriptTree(dir);
+
+	if (!scriptTree) {
+		return {};
+	}
+
+	const { $className, ...children } = scriptTree;
+
+	return children;
+}
+
+function ensurePath(root, parts) {
 	let current = root;
 
-	for (const part of folder) {
+	for (const part of parts) {
 		if (!current[part]) {
 			current[part] = { $className: "Folder" };
 		}
@@ -217,86 +143,121 @@ function getOrCreateFolder(root, folder) {
 	return current;
 }
 
-const tree = {
+function listDirectories(dir) {
+	if (!exists(dir)) {
+		return [];
+	}
+
+	return fs
+		.readdirSync(dir, { withFileTypes: true })
+		.filter((entry) => entry.isDirectory())
+		.map((entry) => entry.name)
+		.sort((left, right) => left.localeCompare(right));
+}
+
+function addIfExists(parent, name, filePath) {
+	if (exists(filePath)) {
+		parent[name] = pathMapping(filePath);
+	}
+}
+
+function isDirectoryEntry(entry, fullPath) {
+	if (entry.isDirectory()) {
+		return true;
+	}
+
+	if (!entry.isSymbolicLink()) {
+		return false;
+	}
+
+	return fs.statSync(fullPath).isDirectory();
+}
+
+function addPackageChildren(target, dir, sourceName) {
+	if (!exists(dir)) {
+		return;
+	}
+
+	const entries = fs
+		.readdirSync(dir, { withFileTypes: true })
+		.sort((left, right) => left.name.localeCompare(right.name));
+
+	for (const entry of entries) {
+		if (entry.name === ".gitkeep") {
+			continue;
+		}
+
+		const fullPath = path.join(dir, entry.name);
+		let instanceName;
+
+		if (isDirectoryEntry(entry, fullPath)) {
+			instanceName = entry.name;
+		} else if (entry.isFile() && isScriptFile(entry.name)) {
+			instanceName = stripScriptSuffix(path.basename(entry.name, path.extname(entry.name)));
+		} else {
+			continue;
+		}
+
+		if (target[instanceName]) {
+			throw new Error(`Package name collision for "${instanceName}" while adding ${sourceName}.`);
+		}
+
+		target[instanceName] = pathMapping(fullPath);
+	}
+}
+
+function addPackageMappings(project) {
+	const packagesTarget = ensurePath(project.tree.ReplicatedStorage, ["Packages"]);
+
+	addPackageChildren(packagesTarget, PACKAGES_PATH, "Wally packages");
+	addPackageChildren(packagesTarget, SOURCE_ROOTS.packages, "custom packages");
+}
+
+function addServiceMappings(project) {
+	for (const serviceName of listDirectories(SOURCE_ROOTS.services)) {
+		const servicePath = path.join(SOURCE_ROOTS.services, serviceName);
+		const instanceName = toInstanceName(serviceName);
+		const replicatedTarget = ensurePath(project.tree.ReplicatedStorage, ["Services", instanceName]);
+		const serverTarget = ensurePath(project.tree.ServerScriptService.Services, [instanceName]);
+
+		const clientTree = buildScriptTree(path.join(servicePath, "Client"));
+		const serverTree = buildScriptTree(path.join(servicePath, "Server"));
+		const utilsTree = buildScriptTree(path.join(servicePath, "Utils"));
+
+		// Client and Utils are replicated so both client and server code can require them.
+		if (clientTree) {
+			replicatedTarget[`${instanceName}Client`] = clientTree;
+		}
+
+		if (utilsTree) {
+			replicatedTarget[`${instanceName}Utils`] = utilsTree;
+		}
+
+		// Server stays private in ServerScriptService.
+		if (serverTree) {
+			serverTarget[`${instanceName}Server`] = serverTree;
+		}
+	}
+}
+
+const project = {
 	name: readProjectName(),
 	tree: {
 		$className: "DataModel",
-		Workspace: createFolders(WORKSPACE_FOLDERS),
-		ReplicatedStorage: {
-			Shared: {
-				$className: "Folder",
-				...createFolders(SHARED_FOLDERS),
-			},
-			Assets: {
-				$className: "Folder",
-				...createFolders(ASSET_FOLDERS),
-			},
-		},
-		ServerScriptService: {
-			...createFolders(SERVER_FOLDERS),
-		},
-		ServerStorage: {
-			...createFolders(SERVER_STORAGE_FOLDERS),
-		},
+		ReplicatedStorage: serviceChildrenFromDir(SOURCE_ROOTS.shared),
+		ServerScriptService: serviceChildrenFromDir(SOURCE_ROOTS.server),
 		StarterPlayer: {
-			StarterPlayerScripts: {
-				...createFolders(CLIENT_FOLDERS),
-				UI: {
-					$className: "Folder",
-					...createFolders(UI_FOLDERS),
-				},
-			},
+			StarterPlayerScripts: serviceChildrenFromDir(SOURCE_ROOTS.client),
 		},
 	},
 };
 
-if (exists(PACKAGES_PATH)) {
-	tree.tree.ReplicatedStorage.Packages = { $path: relativeToRoot(PACKAGES_PATH) };
-}
+project.tree.ServerScriptService.Services = { $className: "Folder" };
+project.tree.StarterPlayer.StarterPlayerScripts.UI = scriptTreeOrFolder(SOURCE_ROOTS.ui);
+addIfExists(project.tree.ServerScriptService, "Server", STARTUP_SERVER_PATH);
+addIfExists(project.tree.StarterPlayer.StarterPlayerScripts, "Client", STARTUP_CLIENT_PATH);
+addServiceMappings(project);
+addPackageMappings(project);
 
-if (exists(STARTUP_SERVER_PATH)) {
-	tree.tree.ServerScriptService.Server = { $path: relativeToRoot(STARTUP_SERVER_PATH) };
-}
-
-if (exists(STARTUP_CLIENT_PATH)) {
-	tree.tree.StarterPlayer.StarterPlayerScripts.Client = { $path: relativeToRoot(STARTUP_CLIENT_PATH) };
-}
-
-const clientRoot = tree.tree.StarterPlayer.StarterPlayerScripts;
-const sharedRoot = tree.tree.ReplicatedStorage.Shared;
-const serverRoot = tree.tree.ServerScriptService;
-
-function addFileToTree(rootName, root, sourceRoot, filepath) {
-	const { isInit, isServer, folder, name, file } = getVirtualPath(sourceRoot, filepath);
-	const targetRootName = isServer ? "server" : rootName;
-	const targetRoot = isServer ? serverRoot : root;
-
-	if (isClaimedByInit(targetRootName, folder)) {
-		return;
-	}
-
-	if (isInit) {
-		const parent = getOrCreateFolder(targetRoot, folder.slice(0, -1));
-		parent[name] = { $path: file };
-		initClaimedFolders.add(folderKey(targetRootName, folder));
-		return;
-	}
-
-	const current = getOrCreateFolder(targetRoot, folder);
-	current[name] = { $path: file };
-}
-
-for (const filepath of sortFilesForInitClaims(collectScriptFiles(CLIENT_PATH))) {
-	addFileToTree("client", clientRoot, CLIENT_PATH, filepath);
-}
-
-for (const filepath of sortFilesForInitClaims(collectScriptFiles(SHARED_PATH))) {
-	addFileToTree("shared", sharedRoot, SHARED_PATH, filepath);
-}
-
-for (const filepath of sortFilesForInitClaims(collectScriptFiles(SERVER_PATH))) {
-	addFileToTree("server", serverRoot, SERVER_PATH, filepath);
-}
-
-fs.writeFileSync(OUTPUT_PATH, JSON.stringify(tree, null, 2) + "\n");
+fs.writeFileSync(OUTPUT_PATH, `${JSON.stringify(project, null, 2)}\n`);
 console.log("default.project.json generated.");
