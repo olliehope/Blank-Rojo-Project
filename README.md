@@ -1,22 +1,53 @@
 # Blank-Rojo-Project
 
-A small Rojo/Rokit/Wally starter for Roblox projects.
+A small Rojo/Aftman/Wally starter for Roblox projects.
 
 ## New Project
 
-```bash
+```powershell
 npm install
 npm run init -- My Project Name
-rokit install
+aftman install
 wally install
 npm run serve
 ```
 
 `npm run init` updates the npm package name, Wally package name, README title, and generated Rojo project name.
 
-## Commands
+## Terminal Commands
 
-```bash
+First-time setup after cloning this template:
+
+```powershell
+npm install
+npm run init -- "My Game Name"
+aftman install
+wally install
+npm run serve
+```
+
+Daily development:
+
+```powershell
+npm run serve       # generate default.project.json and start Rojo
+npm run watch:rojo  # regenerate default.project.json while editing src
+npm run check       # regenerate Rojo tree, check Stylua, update sourcemap
+npm run format      # format Luau files
+npm run build       # build place.rbxlx
+```
+
+Tooling:
+
+```powershell
+aftman install      # install tools pinned in aftman.toml
+aftman list         # show installed Aftman tools
+wally install       # install packages from wally.toml
+npm run sourcemap   # regenerate sourcemap.json
+```
+
+Project scripts:
+
+```powershell
 npm run init -- My Project Name # rename this clone
 npm run build:rojo             # regenerate default.project.json
 npm run serve                  # generate + start rojo serve
@@ -24,6 +55,8 @@ npm run build                  # build place.rbxlx
 npm run check                  # rojo tree + stylua check + sourcemap
 npm run format                 # format Luau files
 ```
+
+This template uses Aftman as its only toolchain manager. Keep `%USERPROFILE%\.aftman\bin` on your user `PATH` so commands like `rojo`, `wally`, and `stylua` use this project's `aftman.toml`.
 
 ## Layout
 

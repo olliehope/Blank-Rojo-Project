@@ -91,7 +91,7 @@ function updateReadme(displayName) {
 
 		for (let index = 1; index < lines.length; index += 1) {
 			if (lines[index].trim().length > 0) {
-				lines[index] = `A simple Rojo/Rokit/Wally setup for ${displayName}.`;
+				lines[index] = `A simple Rojo/Aftman/Wally setup for ${displayName}.`;
 				break;
 			}
 		}

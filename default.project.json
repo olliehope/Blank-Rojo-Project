@@ -16,10 +16,7 @@
         }
       },
       "Packages": {
-        "$className": "Folder",
-        "ExamplePackage": {
-          "$path": "src/packages/ExamplePackage"
-        }
+        "$className": "Folder"
       }
     },
     "ServerScriptService": {
@@ -45,8 +42,8 @@
           },
           "Components": {
             "$className": "Folder",
-            "PrimaryButton": {
-              "$path": "src/ui/components/PrimaryButton.luau"
+            "Text": {
+              "$path": "src/ui/components/Text.luau"
             }
           },
           "Renderer": {
@@ -54,8 +51,8 @@
           },
           "Screens": {
             "$className": "Folder",
-            "MainScreen": {
-              "$path": "src/ui/screens/MainScreen.luau"
+            "Screen": {
+              "$path": "src/ui/screens/Screen.luau"
             }
           },
           "Theme": {
