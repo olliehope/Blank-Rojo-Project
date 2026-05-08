@@ -13,7 +13,10 @@
     "lint:style": "stylua --check src",
     "check": "node tools/genRojoTree.js && stylua --check src && rojo sourcemap default.project.json --output sourcemap.json",
     "serve": "node tools/genRojoTree.js && rojo serve default.project.json",
-    "build": "node tools/genRojoTree.js && rojo build default.project.json -o place.rbxlx"
+    "build": "node tools/genRojoTree.js && rojo build default.project.json -o place.rbxlx",
+    "wally:install": "npm run wally:types",
+    "wally:types": "wally install && npm run wally:types:apply",
+    "wally:types:apply": "node tools/genRojoTree.js && rojo sourcemap default.project.json --output sourcemap.json && wally-package-types --sourcemap sourcemap.json Packages"
   },
   "keywords": [],
   "author": "",
