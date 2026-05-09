@@ -115,7 +115,7 @@ function main() {
 	updatePackageLock(packageId);
 	updateWallyFiles(packageId);
 	updateReadme(displayName);
-	require("./genRojoTree");
+	require("./genFeatureTree");
 
 	console.log(`${displayName} initialized (${packageId}).`);
 }

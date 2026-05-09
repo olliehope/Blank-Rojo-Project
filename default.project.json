@@ -1,69 +1,66 @@
 {
+  "emitLegacyScripts": false,
   "name": "Blank-Rojo-Project",
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
-      "Services": {
+      "Source": {
         "$className": "Folder",
-        "ExampleService": {
+        "Features": {
           "$className": "Folder",
-          "ExampleServiceClient": {
-            "$path": "src/services/ExampleService/Client"
+          "ExampleFeature": {
+            "$className": "Folder",
+            "ExampleFeatureClient": {
+              "$path": "src/features/ExampleFeature/Client.luau"
+            },
+            "ExampleFeatureUtils": {
+              "$path": "src/features/ExampleFeature/Utils.luau"
+            }
+          }
+        },
+        "Core": {
+          "$className": "Folder"
+        },
+        "Game": {
+          "$className": "Folder",
+          "Config": {
+            "$path": "src/game/Config.luau"
+          }
+        },
+        "StartUp": {
+          "$className": "Folder",
+          "MountUI": {
+            "$path": "src/startup/MountUI.luau"
           },
-          "ExampleServiceUtils": {
-            "$path": "src/services/ExampleService/Utils"
+          "Client": {
+            "$path": "src/startup/Client.client.luau"
           }
         }
       },
       "Packages": {
-        "$className": "Folder"
+        "$path": "Packages"
       }
     },
     "ServerScriptService": {
-      "Services": {
+      "Features": {
         "$className": "Folder",
-        "ExampleService": {
+        "ExampleFeature": {
           "$className": "Folder",
-          "ExampleServiceServer": {
-            "$path": "src/services/ExampleService/Server"
+          "ExampleFeatureServer": {
+            "$path": "src/features/ExampleFeature/Server.luau"
           }
         }
       },
-      "Server": {
-        "$path": "src/startup/Server.server.luau"
-      }
-    },
-    "StarterPlayer": {
-      "StarterPlayerScripts": {
-        "UI": {
-          "$className": "Folder",
-          "App": {
-            "$path": "src/ui/App.luau"
-          },
-          "Components": {
-            "$className": "Folder",
-            "Text": {
-              "$path": "src/ui/components/Text.luau"
-            }
-          },
-          "Renderer": {
-            "$path": "src/ui/Renderer.luau"
-          },
-          "Screens": {
-            "$className": "Folder",
-            "Screen": {
-              "$path": "src/ui/screens/Screen.luau"
-            }
-          },
-          "Theme": {
-            "$className": "Folder",
-            "Theme": {
-              "$path": "src/ui/theme/Theme.luau"
-            }
-          }
-        },
-        "Client": {
-          "$path": "src/startup/Client.client.luau"
+      "Core": {
+        "$className": "Folder"
+      },
+      "Game": {
+        "$className": "Folder"
+      },
+      "StartUp": {
+        "$className": "Folder",
+        "Server": {
+          "$path": "src/startup/Server.server.luau"
         }
       }
     }
