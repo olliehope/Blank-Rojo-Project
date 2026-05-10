@@ -1,6 +1,6 @@
 # Blank-Rojo-Project
 
-A small Rojo/Aftman/Wally starter for Roblox projects.
+A simple Rojo/Aftman/Wally setup for Blank-Rojo-Project.
 
 ## New Project
 
