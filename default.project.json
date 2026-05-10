@@ -1,6 +1,6 @@
 {
   "emitLegacyScripts": false,
-  "name": "Blank-Rojo-Project",
+  "name": "Weapon-RNG",
   "tree": {
     "$className": "DataModel",
     "ReplicatedStorage": {
