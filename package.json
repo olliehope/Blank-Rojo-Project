@@ -1,8 +1,8 @@
 {
-  "name": "weapon-rng",
-  "projectName": "Weapon-RNG",
+  "name": "blank-rojo-project",
+  "projectName": "Blank-Rojo-Project",
   "version": "0.1.0",
-  "description": "Weapon-RNG Roblox project setup.",
+  "description": "Blank-Rojo-Project Roblox project setup.",
   "main": "index.js",
   "scripts": {
     "init": "node tools/initProject.js",
